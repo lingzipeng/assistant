@@ -115,3 +115,190 @@ onPressed: () {
 ## 计数器实现
 
 ![image](https://github.com/lingzipeng/assistant/blob/main/assets/pic/Snipaste_2024-03-16_14-31-20.png)
+
+## 网络库dio的使用
+
+```dart
+ @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Source Page'),
+      ),
+      body: Center(
+          child: ElevatedButton(
+            onPressed: () async {
+              // 创建 Dio 实例
+              Dio dio = Dio();
+
+              try {
+                // 发起 GET 请求
+                Response response = await dio.get('https://jsonplaceholder.typicode.com/posts/1');
+
+                // 打印响应数据
+                print('Response: ${response.data['title']}');
+              } catch (e) {
+                print('Error: $e');
+              }
+            },
+            child: Text('Make Network Request'),
+          ),
+        ),
+    );
+  }
+```
+
+
+
+## 状态管理provider的使用
+
+```
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+class CategoryPage extends StatefulWidget {
+  const CategoryPage({super.key});
+
+  @override
+  State<CategoryPage> createState() => _CategoryPageState();
+}
+
+class _CategoryPageState extends State<CategoryPage> {
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => DataModel(), // 创建数据模型对象
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Source Page'),
+        ),
+        body: Center(
+          child: Consumer<DataModel>(
+            builder: (context, dataModel, _) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () async {
+                      // 获取 DataModel 实例
+                      DataModel dataModel = context.read<DataModel>();
+
+                      dataModel.setResponseData('222');
+                    },
+                    child: Text('点击'),
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    'Response Data: ${dataModel.responseData}',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class DataModel extends ChangeNotifier {
+  String responseData = '';
+
+  void setResponseData(String data) {
+    responseData = data;
+    notifyListeners(); // 通知监听器状态已更新
+  }
+}
+```
+
+## **消息组件**
+
+```
+import 'package:flutter/material.dart';
+
+class MessagePage extends StatefulWidget {
+  const MessagePage({super.key});
+
+  @override
+  State<MessagePage> createState() => _MessagePageState();
+}
+
+class _MessagePageState extends State<MessagePage> {
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Text("消息组件"),
+    );
+  }
+}
+```
+
+## 轮播图组件
+
+```dart
+import 'package:flutter/material.dart';
+import '../../component/card_swiper_widget.dart';
+
+class MessagePage extends StatefulWidget {
+  const MessagePage({super.key});
+
+  @override
+  State<MessagePage> createState() => _MessagePageState();
+}
+
+class _MessagePageState extends State<MessagePage> {
+  final List<String> imageUrls = [
+    'https://i0.hdslb.com/bfs/archive/1db01c0402fcb4f55ae96017b0f9986ebee219f0.jpg',
+    'https://i0.hdslb.com/bfs/archive/3a1feb2169c236c67b86f8b231a2471780703c4b.jpg@672w_378h_1c_!web-home-common-cover',
+    'https://i0.hdslb.com/bfs/archive/f148be797fee7936cd18304a53fafe99860fc5d1.jpg@672w_378h_1c_!web-home-common-cover',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Card Swiper Example'),
+      ),
+      body: CardSwiperWidget(imageUrls: imageUrls),
+    );
+  }
+}
+```
+
+```
+//card_swiper_widget.dart
+import 'package:flutter/material.dart';
+import 'package:card_swiper/card_swiper.dart';
+
+class CardSwiperWidget extends StatelessWidget {
+  final List<String> imageUrls;
+
+  const CardSwiperWidget({Key? key, required this.imageUrls}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 200, // 设置轮播图高度
+      child: Swiper(
+        itemCount: imageUrls.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Card(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Image.network(
+              imageUrls[index],
+              fit: BoxFit.cover,
+            ),
+          );
+        },
+        pagination: SwiperPagination(), // 添加默认的分页指示器
+      ),
+    );
+  }
+}
+```
+
+## 曲线图及饼状图
