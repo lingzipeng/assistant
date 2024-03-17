@@ -385,3 +385,74 @@ class _MessagePageState extends State<MessagePage> {
 }
 ```
 
+## 聊天区
+
+```dart
+import 'package:flutter/material.dart';
+
+class MessagePage extends StatefulWidget {
+  const MessagePage({Key? key}) : super(key: key);
+
+  @override
+  State<MessagePage> createState() => _MessagePageState();
+}
+
+class _MessagePageState extends State<MessagePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('教师信息'),
+        ),
+        body: ListView(
+          padding: EdgeInsets.all(16.0),
+          children: const [
+            ChatMessage(
+              message: 'Hello everyone!',
+              isTeacherMessage: false,
+            ),
+            SizedBox(height: 20),
+            ChatMessage(
+              message: 'Hello class, how are you today?',
+              isTeacherMessage: true,
+            ),
+            SizedBox(height: 20),
+            ChatMessage(
+              message: 'I hope you are all doing well.',
+              isTeacherMessage: false,
+            ),
+            SizedBox(height: 20),
+            ChatMessage(
+              message: 'Don\'t forget about the upcoming assignment.',
+              isTeacherMessage: true,
+            ),
+          ],
+        ));
+  }
+}
+
+class ChatMessage extends StatelessWidget {
+  final String message;
+  final bool isTeacherMessage;
+
+  const ChatMessage({
+    Key? key,
+    required this.message,
+    required this.isTeacherMessage,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      color: isTeacherMessage ? Colors.blue[100] : Colors.green[100],
+      child: Text(
+        message,
+        style: TextStyle(fontSize: 16.0),
+      ),
+    );
+  }
+}
+
+```
+
