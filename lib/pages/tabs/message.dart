@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../component/card_swiper_widget.dart';
+import '../../component/charts.dart';
 
 class MessagePage extends StatefulWidget {
   const MessagePage({super.key});
@@ -9,19 +9,25 @@ class MessagePage extends StatefulWidget {
 }
 
 class _MessagePageState extends State<MessagePage> {
-  final List<String> imageUrls = [
-    'https://i0.hdslb.com/bfs/archive/1db01c0402fcb4f55ae96017b0f9986ebee219f0.jpg',
-    'https://i0.hdslb.com/bfs/archive/3a1feb2169c236c67b86f8b231a2471780703c4b.jpg@672w_378h_1c_!web-home-common-cover',
-    'https://i0.hdslb.com/bfs/archive/f148be797fee7936cd18304a53fafe99860fc5d1.jpg@672w_378h_1c_!web-home-common-cover',
+  final List<SalesData> data = [
+    SalesData(1, 100),
+    SalesData(2, 150),
+    SalesData(3, 200),
+    SalesData(4, 180),
+    SalesData(5, 250),
+    SalesData(6, 300),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Card Swiper Example'),
+        title: Text('Line Chart Example'),
       ),
-      body: CardSwiperWidget(imageUrls: imageUrls),
+      body: Center(
+        child: LineChartWidget(data: data),
+      ),
     );
   }
 }
+

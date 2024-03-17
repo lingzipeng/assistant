@@ -94,7 +94,7 @@ bool _isSearching = false;//定义搜索状态
 
 用Expanded占据剩余空间的
 
-```
+```dart
 //左图标设置
 
 icon: isSearching ? null : Icon(Icons.search),
@@ -152,7 +152,7 @@ onPressed: () {
 
 ## 状态管理provider的使用
 
-```
+```dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -214,7 +214,7 @@ class DataModel extends ChangeNotifier {
 
 ## **消息组件**
 
-```
+```dart
 import 'package:flutter/material.dart';
 
 class MessagePage extends StatefulWidget {
@@ -266,7 +266,7 @@ class _MessagePageState extends State<MessagePage> {
 }
 ```
 
-```
+```dart
 //card_swiper_widget.dart
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
@@ -302,3 +302,86 @@ class CardSwiperWidget extends StatelessWidget {
 ```
 
 ## 曲线图及饼状图
+
+```dart
+//echart.dart
+import 'package:flutter/material.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
+
+class SalesData {
+  final int year;
+  final int sales;
+
+  SalesData(this.year, this.sales);
+}
+
+class LineChartWidget extends StatelessWidget {
+  final List<SalesData> data;
+
+  const LineChartWidget({Key? key, required this.data}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    List<charts.Series<SalesData, int>> series = [
+      charts.Series(
+        id: 'Sales',
+        data: data,
+        domainFn: (SalesData sales, _) => sales.year,
+        measureFn: (SalesData sales, _) => sales.sales,
+      )
+    ];
+
+    return charts.LineChart(
+      series,
+      animate: true,
+      defaultRenderer: charts.LineRendererConfig(includePoints: true),
+      behaviors: [
+        charts.ChartTitle('Year',
+            behaviorPosition: charts.BehaviorPosition.bottom,
+            titleOutsideJustification:
+                charts.OutsideJustification.middleDrawArea),
+        charts.ChartTitle('Sales',
+            behaviorPosition: charts.BehaviorPosition.start,
+            titleOutsideJustification:
+                charts.OutsideJustification.middleDrawArea),
+      ],
+    );
+  }
+}
+```
+
+```dart
+import 'package:flutter/material.dart';
+import '../../component/charts.dart';
+
+class MessagePage extends StatefulWidget {
+  const MessagePage({super.key});
+
+  @override
+  State<MessagePage> createState() => _MessagePageState();
+}
+
+class _MessagePageState extends State<MessagePage> {
+  final List<SalesData> data = [
+    SalesData(1, 100),
+    SalesData(2, 150),
+    SalesData(3, 200),
+    SalesData(4, 180),
+    SalesData(5, 250),
+    SalesData(6, 300),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Line Chart Example'),
+      ),
+      body: Center(
+        child: LineChartWidget(data: data),
+      ),
+    );
+  }
+}
+```
+
