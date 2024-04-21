@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/pages/tabs/score/bar_chart.dart';
-import 'package:flutter_application_1/pages/tabs/score/pie%20_chart.dart';
-import 'package:flutter_application_1/pages/tabs/scorewidget/bar.dart';
-import 'package:flutter_application_1/pages/tabs/scorewidget/pie.dart';
+import 'package:flutter_application_1/pages/tabs/scorewidget/search.dart';
 import 'package:flutter_application_1/pages/tabs/scorewidget/table.dart';
 import 'package:provider/provider.dart';
 
@@ -43,7 +40,7 @@ class _CategoryPageState extends State<CategoryPage> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => table()),
+                        MaterialPageRoute(builder: (context) => Search()),
                       );
                     },
                     //直接搜索，直接出来学生姓名和学生成绩的图形化展示
@@ -57,18 +54,18 @@ class _CategoryPageState extends State<CategoryPage> {
                       );
                     },
                     //班级选择    一个班成绩展示
-                    child: Text('班级表格'),
+                    child: Text('成绩表格'),
                   ),
                   //测试，后面删掉
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Bar()),
-                      );
-                    },
-                    child: Text('柱状图'),
-                  )
+                  // ElevatedButton(
+                  //   onPressed: () {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(builder: (context) => Bar()),
+                  //     );
+                  //   },
+                  //   child: Text('柱状图'),
+                  // )
                 ],
               );
             },

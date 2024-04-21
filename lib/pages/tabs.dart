@@ -41,32 +41,25 @@ class _TabsState extends State<Tabs> {
                     child: UserAccountsDrawerHeader(
                       accountName: Text("基尼钛镁"),
                       accountEmail: Text("jinitaimei@qq.com"),
+                      decoration: BoxDecoration(
+                        color: Colors.blue, // 设置背景颜色为蓝色
+                      ),
                     ))
               ],
             ),
             ListTile(
               leading: CircleAvatar(
-                child: Icon(Icons.people),
+                child: Icon(Icons.people,color: Colors.blue,),
               ),
               title: Text("关于我们"),
               onTap: () {
                 Navigator.pushNamed(context, '/ours');
               },
             ),
-            // const Divider(),
-            // ListTile(
-            //   leading: CircleAvatar(
-            //     child: Icon(Icons.find_in_page),
-            //   ),
-            //   title: Text("问卷调查"),
-            //   onTap: () {
-            //     Navigator.pushNamed(context, '/Questionnaire');
-            //   },
-            // ),
             const Divider(),
             ListTile(
               leading: const CircleAvatar(
-                child: Icon(Icons.login),
+                child: Icon(Icons.login,color: Colors.blue),
               ),
               title: const Text("退出登录"),
               onTap: () {
@@ -79,7 +72,7 @@ class _TabsState extends State<Tabs> {
       ),
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-          fixedColor: Colors.red, //选中的颜色
+          fixedColor: Colors.lightBlue, //选中的颜色
           // iconSize:35,           //底部菜单大小
           currentIndex: _currentIndex, //第几个菜单选中
           type: BottomNavigationBarType.fixed, //如果底部有4个或者4个以上的菜单的时候就需要配置这个参数

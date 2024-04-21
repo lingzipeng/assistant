@@ -43,6 +43,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   webview_flutter: ^4.7.0
   fl_chart: ^0.67.0
+  getwidget: ^2.0.4
 
 dev_dependencies:
   flutter_test:

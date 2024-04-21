@@ -1,7 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
-import '../../chart/bar_chart_sample1.dart';
 import '../../chart/home_chart.dart';
+import '../../service/api_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -10,9 +11,13 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+
+
 class _HomePageState extends State<HomePage> {
   List<String> names = ['学生个数', '班级个数', '教师人数', '课程门数'];
   List<String> count = ['100个', '5个', '56个', '3个'];
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +31,7 @@ class _HomePageState extends State<HomePage> {
               crossAxisCount: 2,
               children: List.generate(4, (index) {
                 return Center(
-                  child: GridItem(names[index],count[index]),
+                  child: GridItem(names[index], count[index]),
                 );
               }),
             ),
@@ -74,7 +79,7 @@ class GridItem extends StatelessWidget {
       margin: EdgeInsets.all(8.0),
       child: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             '$count',

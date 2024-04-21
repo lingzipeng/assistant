@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
+import '../../chart/class_chart.dart';
+
 class MessagePage extends StatefulWidget {
   const MessagePage({Key? key}) : super(key: key);
 
@@ -25,7 +27,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   Dio dio = Dio();
   String responseData = '';
-
   // 发起HTTP请求并更新UI
   void fetchData() async {
     try {
@@ -42,6 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
           await dio.get('http://localhost:8080/scores/allScoresCensus');
       setState(() {
         responseData = response.data.toString();
+        print(responseData);
       });
     } catch (e) {
       setState(() {
@@ -49,6 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
       });
     }
   }
+
   String? _selectedOption;
 
   @override
@@ -63,10 +66,6 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text('班级成绩'),
             ),
             SizedBox(height: 20),
-            // Text(
-            //   '班级选择======科目选择',
-            //   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            // ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround, // 设置水平方向居中对齐
               children: [
@@ -74,13 +73,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   // 设置下拉菜单按钮的提示文本
                   hint: Text('班级选择'),
                   // 设置下拉菜单中的所有选项
-                  items: <String>[
-                    '三年级一班',
-                    '三年级二班',
-                    '三年级三班',
-                    '三年级四班',
-                    '三年级五班'
-                  ].map((String value) {
+                  items: <String>['三年级一班', '三年级二班', '三年级三班', '三年级四班', '三年级五班']
+                      .map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
@@ -98,13 +92,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 DropdownButton<String>(
                   // 设置下拉菜单按钮的提示文本
-                  hint: Text('班级选择'),
+                  hint: Text('科目选择'),
                   // 设置下拉菜单中的所有选项
-                  items: <String>[
-                    '语文',
-                    '数学',
-                    '英语'
-                  ].map((String value) {
+                  items: <String>['语文', '数学', '英语'].map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
@@ -123,14 +113,26 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
             SizedBox(height: 10),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Text(
-                  responseData,
-                  style: TextStyle(fontSize: 16),
+
+            Container(
+              width: 370,
+              height: 380,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.tealAccent.withOpacity(0.5),
+                  width: 2.0,
                 ),
               ),
+              child: ClassChart(),
             ),
+            // Expanded(
+            //   child: SingleChildScrollView(
+            //     child: Text(
+            //       responseData,
+            //       style: TextStyle(fontSize: 16),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),

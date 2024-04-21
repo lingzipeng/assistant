@@ -32,7 +32,7 @@ class _UserPageState extends State<UserPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("便签"),
-        backgroundColor: Color.fromARGB(255, 210, 213, 216), // 设置背景色为灰色
+        backgroundColor: Colors.lightBlueAccent,
         actions: [
           IconButton(
             icon: Icon(Icons.add),
@@ -55,7 +55,7 @@ class _UserPageState extends State<UserPage> {
             _editNote(index);
           },
           trailing: IconButton(
-            icon: Icon(Icons.delete),
+            icon: Icon(Icons.delete,color: Colors.lightBlue),
             onPressed: () {
               _deleteNote(index);
             },
