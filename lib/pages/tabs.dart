@@ -53,16 +53,16 @@ class _TabsState extends State<Tabs> {
                 Navigator.pushNamed(context, '/ours');
               },
             ),
-            const Divider(),
-            ListTile(
-              leading: CircleAvatar(
-                child: Icon(Icons.find_in_page),
-              ),
-              title: Text("问卷调查"),
-              onTap: () {
-                Navigator.pushNamed(context, '/Questionnaire');
-              },
-            ),
+            // const Divider(),
+            // ListTile(
+            //   leading: CircleAvatar(
+            //     child: Icon(Icons.find_in_page),
+            //   ),
+            //   title: Text("问卷调查"),
+            //   onTap: () {
+            //     Navigator.pushNamed(context, '/Questionnaire');
+            //   },
+            // ),
             const Divider(),
             ListTile(
               leading: const CircleAvatar(
@@ -92,8 +92,8 @@ class _TabsState extends State<Tabs> {
           },
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: "首页"),
-            BottomNavigationBarItem(icon: Icon(Icons.scoreboard_outlined), label: "成绩"),
-            BottomNavigationBarItem(icon: Icon(Icons.message), label: "消息"),
+            BottomNavigationBarItem(icon: Icon(Icons.scoreboard_outlined), label: "个人成绩"),
+            BottomNavigationBarItem(icon: Icon(Icons.message), label: "班级成绩"),
             BottomNavigationBarItem(icon: Icon(Icons.note_add), label: "便签"),
           ]),
     );

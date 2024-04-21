@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 
 class MessagePage extends StatefulWidget {
   const MessagePage({Key? key}) : super(key: key);
@@ -11,81 +12,126 @@ class _MessagePageState extends State<MessagePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('教师信息'),
-      ),
-      body: const Column(
-        children: [
-          Divider(color: Colors.grey), // 添加分割线
-          ChatMessage(message: '群消息', unreadCount: 10),
-          Divider(color: Colors.grey), // 添加分割线
-          ChatMessage(message: '张老师的消息', unreadCount: 3),
-          Divider(color: Colors.grey), // 添加分割线
-        ],
-      ),
+      body: MyHomePage(),
     );
   }
 }
 
-class ChatMessage extends StatelessWidget {
-  final String message;
-  final bool isTeacher;
-  final int? unreadCount;
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
 
-  const ChatMessage({
-    required this.message,
-    this.isTeacher = false,
-    this.unreadCount,
-  });
+class _MyHomePageState extends State<MyHomePage> {
+  Dio dio = Dio();
+  String responseData = '';
+
+  // 发起HTTP请求并更新UI
+  void fetchData() async {
+    try {
+      // 构建Authorization头
+      // Options options = Options(
+      //   headers: {
+      //     'Authorization':
+      //         'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYmYiOjE3MTM1OTkwMzcs'
+      //             'ImV4cCI6MTcxMzYwNjIzNywiaWF0IjoxNzEzNTk5MDM3LCJhaWQiOjE1LCJ1c2VybmFtZSI6ImF'
+      //             'kbWluIn0.38MNo7-V-TWNmkL75Z4WgtgJdcAV4FEtpv1jQjccDzQ',
+      //   },
+      // );
+      Response response =
+          await dio.get('http://localhost:8080/scores/allScoresCensus');
+      setState(() {
+        responseData = response.data.toString();
+      });
+    } catch (e) {
+      setState(() {
+        responseData = 'Error: $e';
+      });
+    }
+  }
+  String? _selectedOption;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color:
-          isTeacher ? Colors.blue.withOpacity(0.1) : Colors.white, // 设置不同背景颜色
-      child: ListTile(
-        title: Row(
-          children: [
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ElevatedButton(
+              onPressed: fetchData,
+              child: Text('班级成绩'),
+            ),
+            SizedBox(height: 20),
+            // Text(
+            //   '班级选择======科目选择',
+            //   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            // ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround, // 设置水平方向居中对齐
+              children: [
+                DropdownButton<String>(
+                  // 设置下拉菜单按钮的提示文本
+                  hint: Text('班级选择'),
+                  // 设置下拉菜单中的所有选项
+                  items: <String>[
+                    '三年级一班',
+                    '三年级二班',
+                    '三年级三班',
+                    '三年级四班',
+                    '三年级五班'
+                  ].map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  // 当用户选择一个选项时调用的回调函数
+                  onChanged: (String? newValue) {
+                    // 在用户选择时更新选中的值，并重新构建小部件以更新UI
+                    setState(() {
+                      _selectedOption = newValue;
+                    });
+                  },
+                  // 设置默认选中的选项
+                  value: _selectedOption,
+                ),
+                DropdownButton<String>(
+                  // 设置下拉菜单按钮的提示文本
+                  hint: Text('班级选择'),
+                  // 设置下拉菜单中的所有选项
+                  items: <String>[
+                    '语文',
+                    '数学',
+                    '英语'
+                  ].map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  // 当用户选择一个选项时调用的回调函数
+                  onChanged: (String? newValue) {
+                    // 在用户选择时更新选中的值，并重新构建小部件以更新UI
+                    setState(() {
+                      _selectedOption = newValue;
+                    });
+                  },
+                  // 设置默认选中的选项
+                  value: _selectedOption,
+                )
+              ],
+            ),
+            SizedBox(height: 10),
             Expanded(
-              child: Text(
-                message,
-                style: TextStyle(
-                  fontWeight: isTeacher ? FontWeight.bold : FontWeight.normal,
-                  fontSize: 25, // 设置字体大小为18
+              child: SingleChildScrollView(
+                child: Text(
+                  responseData,
+                  style: TextStyle(fontSize: 16),
                 ),
               ),
             ),
-            if (unreadCount != null && unreadCount! > 0) ...[
-              SizedBox(width: 10),
-              UnreadIndicator(count: unreadCount!),
-            ],
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class UnreadIndicator extends StatelessWidget {
-  final int count;
-
-  const UnreadIndicator({
-    required this.count,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.red,
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: Text(
-        '未读消息$count条',
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 12,
         ),
       ),
     );
