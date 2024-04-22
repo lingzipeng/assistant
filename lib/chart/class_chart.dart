@@ -6,21 +6,29 @@ import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
 class ClassChart extends StatefulWidget {
-  ClassChart({super.key});
+  final List<double> classData;
+  const ClassChart(this.classData, {super.key});
 
-  final shadowColor = const Color(0xFFCCCCCC);
-  final dataList = [
-    const _BarData(AppColors.contentColorYellow, 88, 18),
-    const _BarData(AppColors.contentColorGreen, 77, 8),
-    const _BarData(AppColors.contentColorOrange, 88, 15),
-    const _BarData(AppColors.contentColorPink, 253, 5),
-  ];
 
   @override
   State<ClassChart> createState() => _ClassChartState();
 }
 
 class _ClassChartState extends State<ClassChart> {
+  final shadowColor = const Color(0xFFCCCCCC);
+
+  late List<_BarData> dataList;
+  @override
+  void initState() {
+    super.initState();
+    dataList = [
+      _BarData(AppColors.contentColorYellow, widget.classData[0], 18),
+      _BarData(AppColors.contentColorGreen, widget.classData[1], 8),
+      _BarData(AppColors.contentColorOrange, widget.classData[2], 15),
+      _BarData(AppColors.contentColorPink, widget.classData[3], 5),
+    ];
+  }
+
   BarChartGroupData generateBarGroup(
       int x,
       Color color,
@@ -56,28 +64,28 @@ class _ClassChartState extends State<ClassChart> {
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(AppColors.contentColorYellow), // 设置背景颜色为蓝色
                 ),
-                child: Text("总人数5",style: TextStyle(color: Colors.white)),
+                child: Text("人数${widget.classData[0]}",style: TextStyle(color: Colors.white)),
               ),
               TextButton(
                 onPressed: () {  },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(AppColors.contentColorGreen), // 设置背景颜色为蓝色
                 ),
-                child: Text("最高分100",style: TextStyle(color: Colors.white)),
+                child: Text("最高分${widget.classData[1]}",style: TextStyle(color: Colors.white)),
               ),
               TextButton(
                 onPressed: () {  },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(AppColors.contentColorOrange), // 设置背景颜色为蓝色
                 ),
-                child: Text("最低分60",style: TextStyle(color: Colors.white)),
+                child: Text("最低分${widget.classData[2]}",style: TextStyle(color: Colors.white)),
               ),
               TextButton(
                 onPressed: () {  },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(AppColors.contentColorPink), // 设置背景颜色为蓝色
                 ),
-                child: Text("平均分80",style: TextStyle(color: Colors.white)),
+                child: Text("平均分${widget.classData[3]}",style: TextStyle(color: Colors.white)),
               ),
             ],
           ),
@@ -118,7 +126,7 @@ class _ClassChartState extends State<ClassChart> {
                         return SideTitleWidget(
                           axisSide: meta.axisSide,
                           child: _IconWidget(
-                            color: widget.dataList[index].color,
+                            color: dataList[index].color,
                             isSelected: touchedGroupIndex == index,
                           ),
                         );
@@ -136,7 +144,7 @@ class _ClassChartState extends State<ClassChart> {
                     strokeWidth: 1,
                   ),
                 ),
-                barGroups: widget.dataList.asMap().entries.map((e) {
+                barGroups: dataList.asMap().entries.map((e) {
                   final index = e.key;
                   final data = e.value;
                   return generateBarGroup(
@@ -249,3 +257,5 @@ class _IconWidgetState extends AnimatedWidgetBaseState<_IconWidget> {
     ) as Tween<double>?;
   }
 }
+
+

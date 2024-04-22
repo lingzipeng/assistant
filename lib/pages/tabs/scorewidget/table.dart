@@ -1,5 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
+import '../../../service/api_service.dart';
 import '../score/sheet.dart';
 
 class table extends StatefulWidget {
@@ -8,8 +10,81 @@ class table extends StatefulWidget {
   State<table> createState() => _tableState();
 }
 
+class User {
+  final String className;
+  final String name;
+  final String stuno;
+  final int mathScore;
+  final int chineseScore;
+  final int englishScore;
+
+  User({
+    required this.className,
+    required this.name,
+    required this.stuno,
+    required this.mathScore,
+    required this.chineseScore,
+    required this.englishScore,
+  });
+}
+
 class _tableState extends State<table> {
+
+  late List<User> responseData;
+  late Map<String, List<User>> groupedData = {};
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  void fetchData() async {
+    try {
+      Response response = await APIService.fetchData();
+      final data = response.data['result'];
+
+      setState(() {
+        responseData = [];
+        data.values.forEach((studentData) {
+          if (studentData != null &&
+              studentData is Map<String, dynamic> &&
+              studentData.containsKey('classname') &&
+              studentData.containsKey('name') &&
+              studentData.containsKey('stuno') &&
+              studentData.containsKey('数学') &&
+              studentData.containsKey('语文') &&
+              studentData.containsKey('英语')) {
+            responseData.add(User(
+              className: studentData['classname'] ?? '',
+              name: studentData['name'] ?? '',
+              stuno: studentData['stuno'] ?? '',
+              mathScore: studentData['数学'] ?? 0,
+              chineseScore: studentData['语文'] ?? 0,
+              englishScore: studentData['英语'] ?? 0,
+            ));
+
+          }
+        });
+
+      });
+    } catch (e) {
+      setState(() {
+        responseData = [];
+      });
+    }
+    groupedData = {};
+    for (var user in responseData) {
+      if (!groupedData.containsKey(user.className)) {
+        groupedData[user.className] = [];
+      }
+      groupedData[user.className]!.add(user);
+    }
+    // print(groupedData);
+  }
+
   String? _selectedOption;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +99,7 @@ class _tableState extends State<table> {
                 // 设置下拉菜单按钮的提示文本
                 hint: Text('班级选择'),
                 // 设置下拉菜单中的所有选项
-                items: <String>['三年级一班', '三年级二班', '三年级三班', '三年级四班', '三年级五班']
+                items: <String>['三年级1班', '三年级2班', '三年级3班', '三年级4班', '三年级5班']
                     .map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
@@ -43,9 +118,10 @@ class _tableState extends State<table> {
               ),
               ElevatedButton(
                 onPressed: () {
+                  print(groupedData[_selectedOption]);
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => sheet()),
+                    MaterialPageRoute(builder: (context) => Sheet(groupedData[_selectedOption] ?? [])),
                   );
                 },
                 child: Text('成绩'),

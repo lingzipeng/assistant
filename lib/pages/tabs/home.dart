@@ -11,13 +11,43 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-
-
 class _HomePageState extends State<HomePage> {
-  List<String> names = ['学生个数', '班级个数', '教师人数', '课程门数'];
-  List<String> count = ['100个', '5个', '56个', '3个'];
+  int studentNums = 0;
+  int classNums = 0;
+  int teacherNums = 0;
+  int courseNums = 0;
+  Map<String, double> subjectScores = {
+    '语文': 0,
+    '数学': 0,
+    '英语': 0,
+    '总分': 0,
+  };
+  List<double> averageScores = []; // 存储平均成绩的列表
 
+  void initState() {
+    super.initState();
+    fetchData();
+  }
 
+  void fetchData() async {
+    try {
+      Response response = await APIHomeService.fetchData();
+      Map<String, dynamic> data = response.data['result'];
+      List<dynamic> averageData =
+          data['scores']['barEchartsSeriesList'][0]['data'];
+
+      setState(() {
+        averageScores =
+            averageData.map<double>((value) => value.toDouble()).toList();
+        studentNums = data['studentNums'];
+        classNums = data['classNums'];
+        teacherNums = data['teacherNums'];
+        courseNums = data['courseNums'];
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,35 +59,30 @@ class _HomePageState extends State<HomePage> {
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
               crossAxisCount: 2,
-              children: List.generate(4, (index) {
-                return Center(
-                  child: GridItem(names[index], count[index]),
-                );
-              }),
+              children: [
+                GridItem('学生个数', '$studentNums 个'),
+                GridItem('班级个数', '$classNums 个'),
+                GridItem('教师人数', '$teacherNums 人'),
+                GridItem('课程门数', '$courseNums 门'),
+              ],
             ),
-            HomeEcharts(),
+            Text("年级平均分"),
+            averageScores.isNotEmpty
+                ? Container(
+                    width: 370,
+                    height: 380,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.tealAccent.withOpacity(0.5),
+                        width: 2.0,
+                      ),
+                    ),
+                    child: HomeChart(averageScores),
+                  )
+                : SizedBox()
           ],
         ),
       ),
-    );
-  }
-}
-
-class HomeEcharts extends StatelessWidget {
-  const HomeEcharts({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 370,
-      height: 380,
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.tealAccent.withOpacity(0.5),
-          width: 2.0,
-        ),
-      ),
-      child: HomeChart(),
     );
   }
 }

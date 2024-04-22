@@ -22,20 +22,6 @@ class _CategoryPageState extends State<CategoryPage> {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // ElevatedButton(
-                  //   onPressed: () async {
-                  //     // 获取 DataModel 实例
-                  //     DataModel dataModel = context.read<DataModel>();
-                  //
-                  //     dataModel.setResponseData('222');
-                  //   },
-                  //   child: const Text('点击'),
-                  // ),
-                  // const SizedBox(height: 20),
-                  // Text(
-                  //   'Response Data: ${dataModel.responseData}',
-                  //   style: TextStyle(fontSize: 18),
-                  // ),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(
@@ -45,6 +31,9 @@ class _CategoryPageState extends State<CategoryPage> {
                     },
                     //直接搜索，直接出来学生姓名和学生成绩的图形化展示
                     child: Text('学生搜索'),
+                  ),
+                  SizedBox(
+                    height: 20,
                   ),
                   ElevatedButton(
                     onPressed: () {
@@ -56,16 +45,6 @@ class _CategoryPageState extends State<CategoryPage> {
                     //班级选择    一个班成绩展示
                     child: Text('成绩表格'),
                   ),
-                  //测试，后面删掉
-                  // ElevatedButton(
-                  //   onPressed: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(builder: (context) => Bar()),
-                  //     );
-                  //   },
-                  //   child: Text('柱状图'),
-                  // )
                 ],
               );
             },

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
 import '../../chart/class_chart.dart';
+import '../../service/api_service.dart';
 
 class MessagePage extends StatefulWidget {
   const MessagePage({Key? key}) : super(key: key);
@@ -11,48 +12,118 @@ class MessagePage extends StatefulWidget {
 }
 
 class _MessagePageState extends State<MessagePage> {
+  late List<User> responseData;
+  String? _selectedClass;
+  String? _selectedSubject;
+
+  //展示数据
+  List<double> classData = [];
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: MyHomePage(),
-    );
+  void initState() {
+    super.initState();
+    fetchData();
   }
-}
 
-class MyHomePage extends StatefulWidget {
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  Dio dio = Dio();
-  String responseData = '';
-  // 发起HTTP请求并更新UI
   void fetchData() async {
     try {
-      // 构建Authorization头
-      // Options options = Options(
-      //   headers: {
-      //     'Authorization':
-      //         'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYmYiOjE3MTM1OTkwMzcs'
-      //             'ImV4cCI6MTcxMzYwNjIzNywiaWF0IjoxNzEzNTk5MDM3LCJhaWQiOjE1LCJ1c2VybmFtZSI6ImF'
-      //             'kbWluIn0.38MNo7-V-TWNmkL75Z4WgtgJdcAV4FEtpv1jQjccDzQ',
-      //   },
-      // );
-      Response response =
-          await dio.get('http://localhost:8080/scores/allScoresCensus');
+      Response response = await APIService.fetchData();
+      final data = response.data['result'];
+
       setState(() {
-        responseData = response.data.toString();
-        print(responseData);
+        responseData = [];
+        data.values.forEach((studentData) {
+          if (studentData != null &&
+              studentData is Map<String, dynamic> &&
+              studentData.containsKey('classname') &&
+              studentData.containsKey('name') &&
+              studentData.containsKey('stuno') &&
+              studentData.containsKey('数学') &&
+              studentData.containsKey('语文') &&
+              studentData.containsKey('英语')) {
+            responseData.add(User(
+              className: studentData['classname'] ?? '',
+              name: studentData['name'] ?? '',
+              stuno: studentData['stuno'] ?? '',
+              mathScore: studentData['数学'] ?? 0,
+              chineseScore: studentData['语文'] ?? 0,
+              englishScore: studentData['英语'] ?? 0,
+            ));
+          }
+        });
       });
     } catch (e) {
       setState(() {
-        responseData = 'Error: $e';
+        responseData = [];
       });
     }
   }
 
-  String? _selectedOption;
+  void collectData() {
+    classData = [];
+    if (_selectedClass != null && _selectedSubject != null) {
+      // 1. 根据已经选择的班级和科目筛选获取所有信息
+      List<User> filteredData = responseData
+          .where((user) =>
+              user.className == _selectedClass &&
+              (_selectedSubject == '数学'
+                  ? user.mathScore != 0
+                  : _selectedSubject == '语文'
+                      ? user.chineseScore != 0
+                      : user.englishScore != 0))
+          .toList();
+
+      // 2. 根据信息条数得到该班级的人数
+      int studentCount = filteredData.length;
+      classData.add(studentCount as double);
+
+      // 3. 获取该班级该科目的最高分
+      int maxScore = filteredData.fold<int>(
+          0,
+          (max, user) => _selectedSubject == '数学'
+              ? user.mathScore > max
+                  ? user.mathScore
+                  : max
+              : _selectedSubject == '语文'
+                  ? user.chineseScore > max
+                      ? user.chineseScore
+                      : max
+                  : user.englishScore > max
+                      ? user.englishScore
+                      : max);
+      print(maxScore);
+      classData.add(maxScore as double);
+
+      // 4. 获取该班级该科目的最低分
+      int minScore = filteredData.fold<int>(
+          filteredData.first.mathScore,
+          (min, user) => _selectedSubject == '数学'
+              ? user.mathScore < min
+                  ? user.mathScore
+                  : min
+              : _selectedSubject == '语文'
+                  ? user.chineseScore < min
+                      ? user.chineseScore
+                      : min
+                  : user.englishScore < min
+                      ? user.englishScore
+                      : min);
+      classData.add(minScore as double);
+
+      // 5. 计算该班级选择的该科目的平均成绩
+      double totalScore = filteredData.fold<double>(
+          0,
+          (total, user) => _selectedSubject == '数学'
+              ? total + user.mathScore
+              : _selectedSubject == '语文'
+                  ? total + user.chineseScore
+                  : total + user.englishScore);
+      double averageScore = totalScore / studentCount;
+      classData.add(averageScore);
+      setState(() {
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,80 +133,92 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             ElevatedButton(
-              onPressed: fetchData,
-              child: Text('班级成绩'),
+              onPressed: collectData,
+              child: Text('刷新数据'),
             ),
             SizedBox(height: 20),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround, // 设置水平方向居中对齐
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 DropdownButton<String>(
-                  // 设置下拉菜单按钮的提示文本
-                  hint: Text('班级选择'),
-                  // 设置下拉菜单中的所有选项
-                  items: <String>['三年级一班', '三年级二班', '三年级三班', '三年级四班', '三年级五班']
+                  hint: Text('科目选择'),
+                  items: ['三年级1班', '三年级2班', '三年级3班', '三年级4班', '三年级5班']
                       .map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
                     );
                   }).toList(),
-                  // 当用户选择一个选项时调用的回调函数
                   onChanged: (String? newValue) {
-                    // 在用户选择时更新选中的值，并重新构建小部件以更新UI
                     setState(() {
-                      _selectedOption = newValue;
+                      _selectedClass = newValue;
                     });
                   },
-                  // 设置默认选中的选项
-                  value: _selectedOption,
+                  value: _selectedClass,
                 ),
                 DropdownButton<String>(
-                  // 设置下拉菜单按钮的提示文本
                   hint: Text('科目选择'),
-                  // 设置下拉菜单中的所有选项
-                  items: <String>['语文', '数学', '英语'].map((String value) {
+                  items: ['语文', '数学', '英语'].map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
                     );
                   }).toList(),
-                  // 当用户选择一个选项时调用的回调函数
                   onChanged: (String? newValue) {
-                    // 在用户选择时更新选中的值，并重新构建小部件以更新UI
                     setState(() {
-                      _selectedOption = newValue;
+                      _selectedSubject = newValue;
                     });
                   },
-                  // 设置默认选中的选项
-                  value: _selectedOption,
+                  value: _selectedSubject,
                 )
               ],
             ),
             SizedBox(height: 10),
-
-            Container(
-              width: 370,
-              height: 380,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.tealAccent.withOpacity(0.5),
-                  width: 2.0,
-                ),
-              ),
-              child: ClassChart(),
-            ),
-            // Expanded(
-            //   child: SingleChildScrollView(
-            //     child: Text(
-            //       responseData,
-            //       style: TextStyle(fontSize: 16),
-            //     ),
-            //   ),
-            // ),
+            classData.isNotEmpty
+                ? Container(
+                    key: UniqueKey(),
+                    width: 370,
+                    height: 380,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.tealAccent.withOpacity(0.5),
+                        width: 2.0,
+                      ),
+                    ),
+                    child: ClassChart(classData),
+                  )
+                : SizedBox(),
           ],
         ),
       ),
     );
   }
+}
+
+class User {
+  final String className;
+  final String name;
+  final String stuno;
+  final int mathScore;
+  final int chineseScore;
+  final int englishScore;
+
+  User({
+    required this.className,
+    required this.name,
+    required this.stuno,
+    required this.mathScore,
+    required this.chineseScore,
+    required this.englishScore,
+  });
+}
+
+class Statistics {
+  final int studentCount;
+  final int maxScore;
+  final int minScore;
+  final double averageScore;
+
+  Statistics(
+      this.studentCount, this.maxScore, this.minScore, this.averageScore);
 }

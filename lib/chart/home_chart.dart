@@ -6,21 +6,29 @@ import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
 class HomeChart extends StatefulWidget {
-  HomeChart({super.key});
+  final List<double> averageScores;
+  const HomeChart(this.averageScores, {super.key});
 
-  final shadowColor = const Color(0xFFCCCCCC);
-  final dataList = [
-    const _BarData(AppColors.contentColorYellow, 88, 18),
-    const _BarData(AppColors.contentColorGreen, 77, 8),
-    const _BarData(AppColors.contentColorOrange, 88, 15),
-    const _BarData(AppColors.contentColorPink, 253, 5),
-  ];
 
   @override
   State<HomeChart> createState() => _HomeChartState();
 }
 
 class _HomeChartState extends State<HomeChart> {
+  final shadowColor = const Color(0xFFCCCCCC);
+
+  late List<_BarData> dataList;
+  @override
+  void initState() {
+    super.initState();
+    dataList = [
+      _BarData(AppColors.contentColorYellow, widget.averageScores[0] as double, 18),
+      _BarData(AppColors.contentColorGreen, widget.averageScores[1] as double, 8),
+      _BarData(AppColors.contentColorOrange, widget.averageScores[2] as double, 15),
+      _BarData(AppColors.contentColorPink, (widget.averageScores[0]+widget.averageScores[1]+widget.averageScores[2])as double, 5),
+    ];
+  }
+
   BarChartGroupData generateBarGroup(
       int x,
       Color color,
@@ -48,42 +56,39 @@ class _HomeChartState extends State<HomeChart> {
       children: [
         Container(
           height: 100,
-          child: Wrap(
-            alignment: WrapAlignment.start,
-            spacing: 10, // 水平间距
-            runSpacing: 10,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               TextButton(
                 onPressed: () {  },
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(AppColors.contentColorYellow),
+                  backgroundColor: MaterialStateProperty.all<Color>(AppColors.contentColorYellow), // 设置背景颜色为蓝色
                 ),
-                child: Text("语文平均100",style: TextStyle(color: Colors.white)),
+                child: Text("英语${widget.averageScores[0]}",style: TextStyle(color: Colors.white)),
               ),
               TextButton(
                 onPressed: () {  },
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(AppColors.contentColorGreen),
+                  backgroundColor: MaterialStateProperty.all<Color>(AppColors.contentColorGreen), // 设置背景颜色为蓝色
                 ),
-                child: Text("数学平均100",style: TextStyle(color: Colors.white)),
+                child: Text("数学${widget.averageScores[1]}",style: TextStyle(color: Colors.white)),
               ),
               TextButton(
                 onPressed: () {  },
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(AppColors.contentColorOrange),
+                  backgroundColor: MaterialStateProperty.all<Color>(AppColors.contentColorOrange), // 设置背景颜色为蓝色
                 ),
-                child: Text("英语平均99",style: TextStyle(color: Colors.white)),
+                child: Text("语文${widget.averageScores[2]}",style: TextStyle(color: Colors.white)),
               ),
               TextButton(
                 onPressed: () {  },
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(AppColors.contentColorPink),
+                  backgroundColor: MaterialStateProperty.all<Color>(AppColors.contentColorPink), // 设置背景颜色为蓝色
                 ),
-                child: Text("总分平均250",style: TextStyle(color: Colors.white)),
+                child: Text("总分${widget.averageScores[0]+widget.averageScores[1]+widget.averageScores[2]}",style: TextStyle(color: Colors.white)),
               ),
             ],
           ),
-
         ),
         Padding(
           padding: const EdgeInsets.all(24),
@@ -121,7 +126,7 @@ class _HomeChartState extends State<HomeChart> {
                         return SideTitleWidget(
                           axisSide: meta.axisSide,
                           child: _IconWidget(
-                            color: widget.dataList[index].color,
+                            color: dataList[index].color,
                             isSelected: touchedGroupIndex == index,
                           ),
                         );
@@ -139,7 +144,7 @@ class _HomeChartState extends State<HomeChart> {
                     strokeWidth: 1,
                   ),
                 ),
-                barGroups: widget.dataList.asMap().entries.map((e) {
+                barGroups: dataList.asMap().entries.map((e) {
                   final index = e.key;
                   final data = e.value;
                   return generateBarGroup(
@@ -252,3 +257,4 @@ class _IconWidgetState extends AnimatedWidgetBaseState<_IconWidget> {
     ) as Tween<double>?;
   }
 }
+

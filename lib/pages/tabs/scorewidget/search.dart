@@ -72,6 +72,7 @@ class _SearchState extends State<Search> {
             names.add(studentData['name'] ?? '');
           }
         });
+        //print(responseData[10].className);
         //print(responseData[10].name);
         //print(names);
       });
