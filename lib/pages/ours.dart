@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/tabs/emotions.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class TourGuideDialog extends StatelessWidget {
@@ -122,6 +123,7 @@ class oursPage extends StatelessWidget {
                       },
                     );
                   },
+                  //onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => emotions()));},
                   child: Text('显示漫游式引导'),
                 ),
               ),

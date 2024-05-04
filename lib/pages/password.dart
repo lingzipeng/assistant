@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart'; // 导入 collection 包
 import 'package:flutter_application_1/pages/tabs/scorewidget/table.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import '../service/globals_provider.dart';
 
@@ -27,27 +28,45 @@ class _PasswordPageState extends State<PasswordPage> {
     if (listEquality.equals(selectedNumbers, expectedNumbers)) {
 
       // 显示成功提示
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            '密码正确',
-            style: TextStyle(color: Colors.green), // 设置文字颜色为绿色
-          ),
-          duration: Duration(seconds: 2),
-        ),
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text(
+      //       '密码正确',
+      //       style: TextStyle(color: Colors.green), // 设置文字颜色为绿色
+      //     ),
+      //     duration: Duration(seconds: 2),
+      //   ),
+      // );
+      Fluttertoast.showToast(
+        msg: "密码正确",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 3,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0,
       );
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => table()),
       );
     } else {
-      // 显示失败提示
+      //显示失败提示
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('密码错误，请重新输入'),
           duration: Duration(seconds: 2),
         ),
       );
+      // Fluttertoast.showToast(
+      //   msg: "密码错误",
+      //   toastLength: Toast.LENGTH_SHORT,
+      //   gravity: ToastGravity.TOP,
+      //   timeInSecForIosWeb: 3,
+      //   backgroundColor: Colors.deepOrange,
+      //   textColor: Colors.white,
+      //   fontSize: 16.0,
+      // );
     }
 
     // 清除用户的选择

@@ -3,11 +3,16 @@ import 'dart:math' as math;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
+import '../pages/tabs/emotions.dart';
 import 'app_colors.dart';
 
 class StudentChart extends StatefulWidget {
   final List<int> scores;
-  StudentChart(this.scores, {super.key});
+  final List<int> allChineseScores;
+  final List<int> allMathScores;
+  final List<int> allEnglishScores;
+
+  StudentChart(this.scores,this.allChineseScores, this.allMathScores, this.allEnglishScores,{super.key});
 
 
   @override
@@ -17,10 +22,18 @@ class StudentChart extends StatefulWidget {
 class _StudentChartState extends State<StudentChart> {
   final shadowColor = const Color(0xFFCCCCCC);
 
+
   late List<_BarData> dataList;
+
+  int ChineseRank = -1;
+  int MathRank = -1;
+  int EnglishRank = -1;
   @override
   void initState() {
     super.initState();
+    ChineseRank = widget.allChineseScores.indexOf(widget.scores[0])+1;
+    MathRank = widget.allMathScores.indexOf(widget.scores[1])+1;
+    EnglishRank = widget.allEnglishScores.indexOf(widget.scores[2])+1;
     dataList = [
       _BarData(AppColors.contentColorYellow, widget.scores[0] as double, 18),
       _BarData(AppColors.contentColorBlue, widget.scores[1] as double, 8),
@@ -60,21 +73,21 @@ class _StudentChartState extends State<StudentChart> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               TextButton(
-                onPressed: () {  },
+                onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => emotions("语文",ChineseRank,widget.scores[0],widget.allChineseScores))); },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(AppColors.contentColorYellow), // 设置背景颜色为蓝色
                 ),
                 child: Text("语文${widget.scores[0]}",style: TextStyle(color: Colors.white)),
               ),
               TextButton(
-                onPressed: () {  },
+                onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => emotions("数学",MathRank,widget.scores[1],widget.allMathScores))); },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(AppColors.contentColorBlue), // 设置背景颜色为蓝色
                 ),
                 child: Text("数学${widget.scores[1]}",style: TextStyle(color: Colors.white)),
               ),
               TextButton(
-                onPressed: () {  },
+                onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context) => emotions("英语",EnglishRank,widget.scores[2],widget.allEnglishScores))); },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(AppColors.contentColorOrange), // 设置背景颜色为蓝色
                 ),

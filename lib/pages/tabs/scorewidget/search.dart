@@ -38,6 +38,18 @@ class _SearchState extends State<Search> {
   //成绩
   List<int> scores = [];
 
+  //排名（顺序是语文、数学、英语）
+  List<int> ranks = [];
+
+  //总分排名
+  int allranks = 0;
+
+  //所有成绩
+  List<int> allChineseScores = [];
+  List<int> allMathScores = [];
+  List<int> allEnglishScores = [];
+  List<int> allScores = [];
+
   @override
   void initState() {
     super.initState();
@@ -61,6 +73,10 @@ class _SearchState extends State<Search> {
               studentData.containsKey('数学') &&
               studentData.containsKey('语文') &&
               studentData.containsKey('英语')) {
+            allChineseScores.add(studentData['语文']);
+            allMathScores.add(studentData['数学']);
+            allEnglishScores.add(studentData['英语']);
+            allScores.add(studentData['数学'] + studentData['语文'] + studentData['英语']);
             responseData.add(User(
               className: studentData['classname'] ?? '',
               name: studentData['name'] ?? '',
@@ -72,9 +88,18 @@ class _SearchState extends State<Search> {
             names.add(studentData['name'] ?? '');
           }
         });
-        //print(responseData[10].className);
-        //print(responseData[10].name);
+
+        // print("====");
+        // print(responseData[10].mathScore);
         //print(names);
+        //从大到小排序
+        allChineseScores.sort((a, b) => b.compareTo(a));
+        allMathScores.sort((a, b) => b.compareTo(a));
+        allEnglishScores.sort((a, b) => b.compareTo(a));
+        allScores.sort((a, b) => b.compareTo(a));
+        //print(allChineseScores);
+
+        //allranks = allScores.indexOf(scores);
       });
     } catch (e) {
       setState(() {
@@ -117,6 +142,7 @@ class _SearchState extends State<Search> {
                           scores.add(user[0].chineseScore);
                           scores.add(user[0].mathScore);
                           scores.add(user[0].englishScore);
+                          allranks = allScores.indexOf(user[0].chineseScore+user[0].mathScore+user[0].englishScore)+1;
                         }
                         setState(() {
                         });
@@ -141,14 +167,31 @@ class _SearchState extends State<Search> {
               ) : Container(
                 key: UniqueKey(),
                 width: 370,
-                height: 380,
+                height: 460,
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: Colors.tealAccent.withOpacity(0.5),
                     width: 2.0,
                   ),
                 ),
-                child: StudentChart(scores),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "总分 : 级排名为",
+                          style: TextStyle(fontSize: 30, color: Colors.black),
+                        ),
+                        Text(
+                          "${allranks}",
+                          style: TextStyle(fontSize: 50, color: Colors.red),
+                        ),
+                      ],
+                    ),
+                    StudentChart(scores,allChineseScores,allMathScores,allEnglishScores)
+                  ],
+                ),//传入数据：各科成绩
               ),
             ],
           ),

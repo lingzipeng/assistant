@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+
+
 class GlobalArrayProvider extends ChangeNotifier {
   List<int> _globalArray = [1, 2, 3, 4, 5];
 
