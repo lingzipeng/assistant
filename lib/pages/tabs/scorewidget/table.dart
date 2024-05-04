@@ -5,7 +5,7 @@ import '../../../service/api_service.dart';
 import '../score/sheet.dart';
 
 class table extends StatefulWidget {
-  table({super.key});
+  const table({super.key});
   @override
   State<table> createState() => _tableState();
 }

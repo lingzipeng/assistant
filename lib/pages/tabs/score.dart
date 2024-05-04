@@ -3,6 +3,9 @@ import 'package:flutter_application_1/pages/tabs/scorewidget/search.dart';
 import 'package:flutter_application_1/pages/tabs/scorewidget/table.dart';
 import 'package:provider/provider.dart';
 
+import '../Questionnaire.dart';
+import '../password.dart';
+
 class CategoryPage extends StatefulWidget {
   const CategoryPage({super.key});
 
@@ -16,39 +19,49 @@ class _CategoryPageState extends State<CategoryPage> {
     return ChangeNotifierProvider(
       create: (_) => DataModel(), // 创建数据模型对象
       child: Scaffold(
-        body: Center(
-          child: Consumer<DataModel>(
-            builder: (context, dataModel, _) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Search()),
-                      );
-                    },
-                    //直接搜索，直接出来学生姓名和学生成绩的图形化展示
-                    child: Text('学生搜索'),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => table()),
-                      );
-                    },
-                    //班级选择    一个班成绩展示
-                    child: Text('成绩表格'),
-                  ),
-                ],
-              );
-            },
-          ),
+        body: Stack(
+          children: [
+            Image.asset(
+              'assets/images/4.jpg',
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,
+            ),
+            Center(
+              child: Consumer<DataModel>(
+                builder: (context, dataModel, _) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Search()),
+                          );
+                        },
+                        //直接搜索，直接出来学生姓名和学生成绩的图形化展示
+                        child: Text('学生搜索'),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => PasswordPage()),
+                          );
+                        },
+                        //班级选择    一个班成绩展示
+                        child: Text('成绩表格'),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            )
+          ],
         ),
       ),
     );

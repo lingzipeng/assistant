@@ -132,7 +132,7 @@ class _SearchState extends State<Search> {
                 ),
               ),
               SizedBox(height: 80), // 调整间距
-              scores.isEmpty ? Center(
+              scores.isEmpty ? const Center(
                 child: Text("请输入真实姓名...",
                   style: TextStyle(
                   color: Colors.purple, // 修改为你想要的颜色

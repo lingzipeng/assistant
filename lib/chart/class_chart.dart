@@ -23,7 +23,7 @@ class _ClassChartState extends State<ClassChart> {
     super.initState();
     dataList = [
       _BarData(AppColors.contentColorYellow, widget.classData[0], 18),
-      _BarData(AppColors.contentColorGreen, widget.classData[1], 8),
+      _BarData(AppColors.contentColorBlue, widget.classData[1], 8),
       _BarData(AppColors.contentColorOrange, widget.classData[2], 15),
       _BarData(AppColors.contentColorPink, widget.classData[3], 5),
     ];
@@ -69,7 +69,7 @@ class _ClassChartState extends State<ClassChart> {
               TextButton(
                 onPressed: () {  },
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(AppColors.contentColorGreen), // 设置背景颜色为蓝色
+                  backgroundColor: MaterialStateProperty.all<Color>(AppColors.contentColorBlue), // 设置背景颜色为蓝色
                 ),
                 child: Text("最高分${widget.classData[1]}",style: TextStyle(color: Colors.white)),
               ),

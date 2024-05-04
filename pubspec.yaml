@@ -44,6 +44,8 @@ dependencies:
   webview_flutter: ^4.7.0
   fl_chart: ^0.67.0
   getwidget: ^2.0.4
+  skeletonizer: ^1.1.2+1
+  fluttertoast: ^8.0.7
 
 dev_dependencies:
   flutter_test:
@@ -62,7 +64,10 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   assets:
-    - assets/
+    - assets/images/bg1.png
+    - assets/images/4.jpg
+    - assets/images/5.jpg
+    - assets/images/6.jpg
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

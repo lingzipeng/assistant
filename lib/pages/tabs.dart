@@ -58,6 +58,26 @@ class _TabsState extends State<Tabs> {
             ),
             const Divider(),
             ListTile(
+              leading: CircleAvatar(
+                child: Icon(Icons.people,color: Colors.blue,),
+              ),
+              title: Text("调查问卷"),
+              onTap: () {
+                Navigator.pushNamed(context, '/Questionnaire');
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: CircleAvatar(
+                child: Icon(Icons.people,color: Colors.blue,),
+              ),
+              title: Text("密码设置"),
+              onTap: () {
+                Navigator.pushNamed(context, '/setting');
+              },
+            ),
+            const Divider(),
+            ListTile(
               leading: const CircleAvatar(
                 child: Icon(Icons.login,color: Colors.blue),
               ),

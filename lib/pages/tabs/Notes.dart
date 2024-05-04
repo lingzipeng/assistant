@@ -40,7 +40,17 @@ class _UserPageState extends State<UserPage> {
           ),
         ],
       ),
-      body: _buildNotesList(),
+      body: Stack(
+        children: [
+          Image.asset(
+            'assets/images/bg1.png',
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          ),
+          _buildNotesList(),
+        ],
+      ),
     );
   }
 
@@ -49,21 +59,26 @@ class _UserPageState extends State<UserPage> {
     return ListView.builder(
       itemCount: notes.length,
       itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(notes[index].content),
-          onTap: () {
-            _editNote(index);
-          },
-          trailing: IconButton(
-            icon: Icon(Icons.delete,color: Colors.lightBlue),
-            onPressed: () {
-              _deleteNote(index);
+        return Card( // 添加Card包裹ListTile
+          elevation: 4, // 调整阴影效果
+          margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5), // 调整Card边距
+          child: ListTile(
+            title: Text(notes[index].content),
+            onTap: () {
+              _editNote(index);
             },
+            trailing: IconButton(
+              icon: Icon(Icons.delete,color: Colors.lightBlue),
+              onPressed: () {
+                _deleteNote(index);
+              },
+            ),
           ),
         );
       },
     );
   }
+
 
   // 添加便签方法
   void _addNote() async {

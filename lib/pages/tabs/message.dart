@@ -74,8 +74,8 @@ class _MessagePageState extends State<MessagePage> {
           .toList();
 
       // 2. 根据信息条数得到该班级的人数
-      int studentCount = filteredData.length;
-      classData.add(studentCount as double);
+      double studentCount = filteredData.length as double;
+      classData.add(studentCount);
 
       // 3. 获取该班级该科目的最高分
       int maxScore = filteredData.fold<int>(
@@ -128,68 +128,78 @@ class _MessagePageState extends State<MessagePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ElevatedButton(
-              onPressed: collectData,
-              child: Text('刷新数据'),
-            ),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                DropdownButton<String>(
-                  hint: Text('科目选择'),
-                  items: ['三年级1班', '三年级2班', '三年级3班', '三年级4班', '三年级5班']
-                      .map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedClass = newValue;
-                    });
-                  },
-                  value: _selectedClass,
+      body: Stack(
+        children: [
+          Image.asset(
+            'assets/images/4.jpg',
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          ),
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                ElevatedButton(
+                  onPressed: collectData,
+                  child: Text('刷新数据'),
                 ),
-                DropdownButton<String>(
-                  hint: Text('科目选择'),
-                  items: ['语文', '数学', '英语'].map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedSubject = newValue;
-                    });
-                  },
-                  value: _selectedSubject,
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    DropdownButton<String>(
+                      hint: Text('科目选择'),
+                      items: ['三年级1班', '三年级2班', '三年级3班', '三年级4班', '三年级5班']
+                          .map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedClass = newValue;
+                        });
+                      },
+                      value: _selectedClass,
+                    ),
+                    DropdownButton<String>(
+                      hint: Text('科目选择'),
+                      items: ['语文', '数学', '英语'].map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedSubject = newValue;
+                        });
+                      },
+                      value: _selectedSubject,
+                    )
+                  ],
+                ),
+                SizedBox(height: 10),
+                classData.isNotEmpty
+                    ? Container(
+                  key: UniqueKey(),
+                  width: 370,
+                  height: 380,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.tealAccent.withOpacity(0.5),
+                      width: 2.0,
+                    ),
+                  ),
+                  child: ClassChart(classData),
                 )
+                    : SizedBox(),
               ],
             ),
-            SizedBox(height: 10),
-            classData.isNotEmpty
-                ? Container(
-                    key: UniqueKey(),
-                    width: 370,
-                    height: 380,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.tealAccent.withOpacity(0.5),
-                        width: 2.0,
-                      ),
-                    ),
-                    child: ClassChart(classData),
-                  )
-                : SizedBox(),
-          ],
-        ),
+          )
+        ],
       ),
     );
   }

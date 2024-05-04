@@ -11,7 +11,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<HomePage> {
   int studentNums = 0;
   int classNums = 0;
   int teacherNums = 0;
@@ -24,6 +24,10 @@ class _HomePageState extends State<HomePage> {
   };
   List<double> averageScores = []; // 存储平均成绩的列表
 
+  @override
+  bool get wantKeepAlive => true; // 返回true以保持页面状态
+
+  @override
   void initState() {
     super.initState();
     fetchData();
@@ -34,7 +38,7 @@ class _HomePageState extends State<HomePage> {
       Response response = await APIHomeService.fetchData();
       Map<String, dynamic> data = response.data['result'];
       List<dynamic> averageData =
-          data['scores']['barEchartsSeriesList'][0]['data'];
+      data['scores']['barEchartsSeriesList'][0]['data'];
 
       setState(() {
         averageScores =
@@ -51,37 +55,50 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context); // 调用父类的build方法
+
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            GridView.count(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              crossAxisCount: 2,
+      body: Stack(
+        children: [
+          Image.asset(
+            'assets/images/4.jpg',
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          ),
+          SingleChildScrollView(
+            child: Column(
               children: [
-                GridItem('学生个数', '$studentNums 个'),
-                GridItem('班级个数', '$classNums 个'),
-                GridItem('教师人数', '$teacherNums 人'),
-                GridItem('课程门数', '$courseNums 门'),
+                GridView.count(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  crossAxisCount: 2,
+                  children: [
+                    GridItem('学生个数', '$studentNums 个'),
+                    GridItem('班级个数', '$classNums 个'),
+                    GridItem('教师人数', '$teacherNums 人'),
+                    GridItem('课程门数', '$courseNums 门'),
+                  ],
+                ),
+                Text("年级平均分"),
+                Visibility(visible: averageScores.isNotEmpty,child: averageScores.isNotEmpty
+                    ? Container(
+                  width: 370,
+                  height: 380,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.tealAccent.withOpacity(0.5),
+                      width: 2.0,
+                    ),
+                  ),
+                  child: HomeChart(averageScores),
+                )
+                    : SizedBox()),
+
               ],
             ),
-            Text("年级平均分"),
-            averageScores.isNotEmpty
-                ? Container(
-                    width: 370,
-                    height: 380,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.tealAccent.withOpacity(0.5),
-                        width: 2.0,
-                      ),
-                    ),
-                    child: HomeChart(averageScores),
-                  )
-                : SizedBox()
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
@@ -104,18 +121,18 @@ class GridItem extends StatelessWidget {
       margin: EdgeInsets.all(8.0),
       child: Center(
           child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            '$count',
-            style: TextStyle(color: Colors.white, fontSize: 40.0),
-          ),
-          Text(
-            '$name',
-            style: TextStyle(color: Colors.white, fontSize: 20.0),
-          ),
-        ],
-      )),
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                '$count',
+                style: TextStyle(color: Colors.white, fontSize: 40.0),
+              ),
+              Text(
+                '$name',
+                style: TextStyle(color: Colors.white, fontSize: 20.0),
+              ),
+            ],
+          )),
     );
   }
 }

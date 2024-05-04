@@ -23,7 +23,7 @@ class _StudentChartState extends State<StudentChart> {
     super.initState();
     dataList = [
       _BarData(AppColors.contentColorYellow, widget.scores[0] as double, 18),
-      _BarData(AppColors.contentColorGreen, widget.scores[1] as double, 8),
+      _BarData(AppColors.contentColorBlue, widget.scores[1] as double, 8),
       _BarData(AppColors.contentColorOrange, widget.scores[2] as double, 15),
       _BarData(AppColors.contentColorPink, (widget.scores[0]+widget.scores[1]+widget.scores[2])as double, 5),
     ];
@@ -69,7 +69,7 @@ class _StudentChartState extends State<StudentChart> {
               TextButton(
                 onPressed: () {  },
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(AppColors.contentColorGreen), // 设置背景颜色为蓝色
+                  backgroundColor: MaterialStateProperty.all<Color>(AppColors.contentColorBlue), // 设置背景颜色为蓝色
                 ),
                 child: Text("数学${widget.scores[1]}",style: TextStyle(color: Colors.white)),
               ),
@@ -85,7 +85,7 @@ class _StudentChartState extends State<StudentChart> {
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(AppColors.contentColorPink), // 设置背景颜色为蓝色
                 ),
-                child: Text("总分${widget.scores[0]+widget.scores[0]+widget.scores[0]}",style: TextStyle(color: Colors.white)),
+                child: Text("总分${widget.scores[0]+widget.scores[1]+widget.scores[2]}",style: TextStyle(color: Colors.white)),
               ),
             ],
           ),
