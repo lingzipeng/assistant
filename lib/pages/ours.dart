@@ -94,7 +94,7 @@ class oursPage extends StatelessWidget {
                                       builder: (BuildContext context) {
                                         return TourGuideDialog(
                                           title: '欢迎使用教师助手!',
-                                          message: '班级成绩页面可以查看班级的情况，便签可以记录笔记。',
+                                          message: '排行榜可以查看个人排名情况的情况，便签可以记录笔记。',
                                           onNextPressed: () {
                                             Navigator.of(context).pop(); // 关闭当前的TourGuideDialog
                                             // 显示成功提示

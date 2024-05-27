@@ -50,7 +50,7 @@ class _CategoryPageState extends State<CategoryPage> {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => PasswordPage()),
+                            MaterialPageRoute(builder: (context) => table()),
                           );
                         },
                         //班级选择    一个班成绩展示

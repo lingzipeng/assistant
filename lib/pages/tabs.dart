@@ -67,26 +67,26 @@ class _TabsState extends State<Tabs> {
               },
             ),
             const Divider(),
-            ListTile(
-              leading: CircleAvatar(
-                child: Icon(Icons.people,color: Colors.blue,),
-              ),
-              title: Text("密码设置"),
-              onTap: () {
-                Navigator.pushNamed(context, '/setting');
-              },
-            ),
-            const Divider(),
-            ListTile(
-              leading: const CircleAvatar(
-                child: Icon(Icons.login,color: Colors.blue),
-              ),
-              title: const Text("退出登录"),
-              onTap: () {
-                Navigator.pushNamed(context, '/login');
-              },
-            ),
-            const Divider(),
+            // ListTile(
+            //   leading: CircleAvatar(
+            //     child: Icon(Icons.people,color: Colors.blue,),
+            //   ),
+            //   title: Text("密码设置"),
+            //   onTap: () {
+            //     Navigator.pushNamed(context, '/setting');
+            //   },
+            // ),
+            // const Divider(),
+            // ListTile(
+            //   leading: const CircleAvatar(
+            //     child: Icon(Icons.login,color: Colors.blue),
+            //   ),
+            //   title: const Text("ai帮你看"),
+            //   onTap: () {
+            //     Navigator.pushNamed(context, '/ai');
+            //   },
+            // ),
+            // const Divider(),
           ],
         ),
       ),
@@ -106,7 +106,7 @@ class _TabsState extends State<Tabs> {
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: "首页"),
             BottomNavigationBarItem(icon: Icon(Icons.scoreboard_outlined), label: "个人成绩"),
-            BottomNavigationBarItem(icon: Icon(Icons.message), label: "班级成绩"),
+            BottomNavigationBarItem(icon: Icon(Icons.message), label: "ai帮你看"),
             BottomNavigationBarItem(icon: Icon(Icons.note_add), label: "便签"),
           ]),
     );

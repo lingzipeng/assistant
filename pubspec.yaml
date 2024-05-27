@@ -37,6 +37,7 @@ dependencies:
   charts_flutter: ^0.12.0
   flutter_echarts: ^2.5.0
   material_table_view: 4.0.2
+  intl: ^0.17.0
 
   # The following adds the Cupertino Icons font to your ap         plication.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -68,6 +69,9 @@ flutter:
     - assets/images/4.jpg
     - assets/images/5.jpg
     - assets/images/6.jpg
+    - assets/images/xiaoheizi.jpg
+    - assets/images/brand_profile_voice@2x.png
+    - assets/images/DefaultProfileHead_kf@3x.png
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

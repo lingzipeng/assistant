@@ -64,7 +64,7 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
       )
           : PageView.builder(
         controller: _pageController,
-        itemCount: _cardList.length,
+        itemCount: _name.length,
         itemBuilder: (BuildContext context, int index) {
           return Card(
             child: Padding(

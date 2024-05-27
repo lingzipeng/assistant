@@ -113,7 +113,10 @@ class _HomeChartState extends State<HomeChart> {
                       showTitles: true,
                       reservedSize: 30,
                       getTitlesWidget: (value, meta) {
-                        return const Text("");
+                        return SizedBox(
+                          height: 20.0, // or any other fixed height
+                          child: const Text(""),
+                        );
                       },
                     ),
                   ),
